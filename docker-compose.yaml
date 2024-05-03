@@ -1,0 +1,25 @@
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  demo:
+    image: jmeter-demo:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 10
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 50M
+        reservations:
+          cpus: '0.08'
+          memory: 20M      
+    expose: 
+      - "8080"
+    environment:
+      VIRTUAL_HOST: localhost
+      VIRTUAL_PORT: 8080
